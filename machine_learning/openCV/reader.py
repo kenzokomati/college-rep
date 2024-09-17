@@ -1,7 +1,7 @@
 import os
-import cv2 as cv  # type: ignore
+import cv2 as cv 
 
-img_path = 'C:/Users/user/OneDrive/Documentos/GitHub/College/Machine Learning/openCV/photo/jhonta.png'
+img_path = 'Machine Learning\openCV\photo\jhonta.png'
 if not os.path.exists(img_path):
     print("Error: File does not exist.")
 else:
@@ -11,4 +11,3 @@ else:
     else:
         cv.imshow('Jhonta', img)
         cv.waitKey(0)
-        cv.destroyAllWindows()

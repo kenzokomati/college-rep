@@ -1,0 +1,10 @@
+{
+  "id": 1,
+  "expiresAt": "2025-03-07",
+  "usersQty": 10,
+  "connectionsQty": 5,
+  "queuesQty": 100,
+  "totalPrice": "410.49",
+  "discount": "400.00",
+  "discountExpiresAt": "2025-02-04"
+}

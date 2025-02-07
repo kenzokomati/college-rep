@@ -2,20 +2,28 @@ import nodemailer from "nodemailer";
 import fs from "fs";
 import path from "path";
 import { differenceInDays } from "date-fns";
+import { fileURLToPath } from "url";
+
+// Get __dirname equivalent for ES modules
+const __dirname = fileURLToPath(new URL('.', import.meta.url));
+const correctedDirname = decodeURIComponent(__dirname); // Decode URL format
 
 async function sendEmail() {
+
   const customerData = JSON.parse(fs.readFileSync(path.join(__dirname, 'customer_package.json'), 'utf8'));
 
   const discountExpiresAt = new Date(customerData.discountExpiresAt);
   const currentDate = new Date();
 
-  const daysUntilExpiration = differenceInDays(discountExpiresAt, currentDate);
+  const daysUntilExpiration = differenceInDays(currentDate, discountExpiresAt);
+
+  console.log(`Days until expiration: ${daysUntilExpiration}`);
   
-  if (daysUntilExpiration === 3) {
-    console.log("The discount expires in 3 days. Sending email...");
+  // if (daysUntilExpiration === 3) {
+  //   console.log("The discount expires in 3 days. Sending email...");
 
     // Read the HTML email template
-    const htmlFilePath = path.join(__dirname, "modelo email cobranca CRM.html");
+    const htmlFilePath = path.join(correctedDirname, "modelo email cobranca CRM.html");
     let htmlContent = fs.readFileSync(htmlFilePath, "utf8");
 
     // Replace placeholders in the HTML content with actual values from customerData
@@ -30,14 +38,14 @@ async function sendEmail() {
     const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
-        user: "seuemail@gmail.com", 
-        pass: "SUA_SENHA_DE_APLICATIVO", 
+        user: "@gmail.com", // Seu e-mail
+        pass: "SUA_SENHA_DE_APLICATIVO", // Senha de aplicativo gerada
       },
     });
 
     const mailOptions = {
       from: '"Seu Nome" <seuemail@gmail.com>',
-      to: "destinatario@gmail.com", 
+      to: "ekkomati0@gmail.com", 
       subject: "Atenção! Sua fatura está disponível", 
       text: "Este é um lembrete para informar que sua fatura está disponível.",
       html: htmlContent, 
@@ -50,9 +58,9 @@ async function sendEmail() {
     } catch (error) {
       console.error("Erro ao enviar e-mail:", error);
     }
-  } else {
-    console.log(`Discount expires in ${daysUntilExpiration} days. No email sent.`);
-  }
+  // } else {
+  //   console.log(`Discount expires in ${daysUntilExpiration} days. No email sent.`);
+  // }
 }
 
 sendEmail();
